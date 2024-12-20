@@ -1,4 +1,4 @@
-package com.faist.weatherapp.ui.theme
+package com.faist.weatherapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
