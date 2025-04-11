@@ -1,35 +1,31 @@
 package com.faist.weatherapp.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.faist.weatherapp.data.network.api.ApiFactory
-import com.faist.weatherapp.presentation.ui.theme.WeatherAppTheme
+import com.arkivanov.decompose.defaultComponentContext
+import com.faist.weatherapp.WeatherApp
+import com.faist.weatherapp.domain.usecase.ChangeFavoriteStateUseCase
+import com.faist.weatherapp.domain.usecase.SearchCityUseCase
+import com.faist.weatherapp.presentation.root.DefaultRootComponent
+import com.faist.weatherapp.presentation.root.RootContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var rootComponentFactory: DefaultRootComponent.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as WeatherApp).applicationComponent.inject(this)
+
         super.onCreate(savedInstanceState)
-
-        val apiService = ApiFactory.apiService
-        CoroutineScope(Dispatchers.Main).launch {
-            val currentWeather = apiService.loadCurrentLocation("Tallinn")
-            val forecast = apiService.loadForecast("Tallinn")
-            val cities = apiService.searchCity("New York")
-            Log.d("CHECK_API",
-                "Current Weather: $currentWeather,\n" +
-                        "Forecast: $forecast,\n" +
-                        "Cities: $cities")
-        }
-
         setContent {
-            WeatherAppTheme {
-
-            }
+            RootContent(component = rootComponentFactory.create(defaultComponentContext()))
         }
     }
 }

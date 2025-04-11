@@ -80,6 +80,9 @@ dependencies {
 
     implementation(libs.androidx.compose.material)
 
+    //SystemUI Controller
+    implementation(libs.accompanist.systemuicontroller)
+
     //MVI Kotlin
     implementation(libs.mvikotlin.core)
     implementation(libs.mvikotlin.main)
@@ -92,6 +95,7 @@ dependencies {
 
     //Room
     implementation(libs.room.core)
+    implementation(libs.androidx.benchmark.junit4)
     ksp(libs.room.compiler)
 
     //Dagger
@@ -104,6 +108,11 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
+
+    //Macrobenchmark
+    implementation(libs.macrobenchmark)
+    implementation(libs.uiautomator.test)
+    implementation(libs.junit.runner)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

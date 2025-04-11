@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Weather App</string>
+    <string name="bt_add_favorite">Add favorite</string>
+    <string name="search">Search</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="not_found">Not found</string>
+    <string name="something_goes_wrong">Something goes wrong</string>
 </resources>
