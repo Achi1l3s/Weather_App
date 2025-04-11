@@ -1,17 +1,40 @@
+import com.android.build.api.variant.BuildConfigField
+
+println("API Key from gradle.properties: ${project.findProperty("apikey")}")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.parcelize)
+}
+
+androidComponents {
+    val key = project.findProperty("apikey")?.toString() ?: error(
+        "You should add apiKey into gradle.properties"
+    )
+
+    onVariants { variant ->
+        variant.buildConfigFields.put(
+            "WEATHER_API_KEY",
+            BuildConfigField(
+                "String",
+                "\"$key\"",
+                "API key for accessing the sevice"
+            )
+        )
+    }
 }
 
 android {
     namespace = "com.faist.weatherapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.faist.weatherapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -27,6 +50,9 @@ android {
             )
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -45,10 +72,48 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.androidx.compose.material)
+
+    //SystemUI Controller
+    implementation(libs.accompanist.systemuicontroller)
+
+    //MVI Kotlin
+    implementation(libs.mvikotlin.core)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.coroutines)
+    implementation(libs.mvikotlin.logging)
+
+    //Decompose
+    implementation(libs.decompose.core)
+    implementation(libs.decompose.jetpack)
+
+    //Room
+    implementation(libs.room.core)
+    implementation(libs.androidx.benchmark.junit4)
+    ksp(libs.room.compiler)
+
+    //Dagger
+    implementation(libs.dagger.core)
+    ksp(libs.dagger.compiler)
+
+    //Glide-compose
+    implementation(libs.glide.compose)
+
+    //Retrofit
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+
+    //Macrobenchmark
+    implementation(libs.macrobenchmark)
+    implementation(libs.uiautomator.test)
+    implementation(libs.junit.runner)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
